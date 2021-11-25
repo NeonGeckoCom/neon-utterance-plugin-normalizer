@@ -25,9 +25,12 @@
 from lingua_franca.parse import normalize
 import lingua_franca.config
 from neon_transformers import UtteranceTransformer
+from neon_transformers.tasks import UtteranceTask
 
 
 class UtteranceNormalizer(UtteranceTransformer):
+    task = UtteranceTask.TRANSFORM
+
     def __init__(self, name="utterance_normalizer", priority=1):
         super().__init__(name, priority)
         lingua_franca.config.load_langs_on_demand = True
