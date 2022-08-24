@@ -22,8 +22,12 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-from lingua_franca.parse import normalize
+
+import re
 import lingua_franca.config
+
+from typing import List, Optional
+from lingua_franca.parse import normalize
 from neon_transformers import UtteranceTransformer
 from neon_transformers.tasks import UtteranceTask
 
@@ -35,11 +39,18 @@ class UtteranceNormalizer(UtteranceTransformer):
         super().__init__(name, priority)
         lingua_franca.config.load_langs_on_demand = True
 
-    def transform(self, utterances, context=None):
+    def transform(self, utterances: List[str],
+                  context: Optional[dict] = None) -> (list, dict):
         context = context or {}
         lang = context.get("lang") or self.config.get("lang", "en-us")
-        norm = [normalize(u, lang=lang, remove_articles=False) for u in utterances]
-        norm2 = [normalize(u, lang=lang, remove_articles=True) for u in utterances]
+        clean = [self._strip_punctuation(u) for u in utterances]
+        norm = [normalize(u, lang=lang, remove_articles=False) for u in clean]
+        norm2 = [normalize(u, lang=lang, remove_articles=True) for u in clean]
         norm += [u for u in norm2 if u not in utterances and u not in norm]
+        norm += [u for u in clean if u not in utterances and u not in norm]
         norm = [u for u in norm if u not in utterances]
-        return utterances + norm, {}
+        return norm + utterances, {}
+
+    @staticmethod
+    def _strip_punctuation(utterance: str):
+        return utterance.rstrip('.').rstrip('?').rstrip('!')
