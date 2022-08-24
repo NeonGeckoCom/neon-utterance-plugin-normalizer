@@ -21,11 +21,24 @@ def get_requirements(requirements_filename: str):
     return requirements
 
 
+with open("README.md", "r") as f:
+    long_description = f.read()
+
+with open("./version.py", "r", encoding="utf-8") as v:
+    for line in v.readlines():
+        if line.startswith("__version__"):
+            if '"' in line:
+                version = line.split('"')[1]
+            else:
+                version = line.split("'")[1]
+
 PLUGIN_ENTRY_POINT = 'neon_utterance_normalizer_plugin=neon_utterance_normalizer_plugin:UtteranceNormalizer'
 setup(
     name='neon_utterance_normalizer_plugin',
-    version='0.0.1',
-    description='A utterance parser/classifier/transformer plugin for ovos/neon/mycroft',
+    version=version,
+    description='An utterance normalizer plugin for ovos/neon/mycroft',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/NeonGeckoCom/neon_utterance_normalizer_plugin',
     author='Neongecko',
     author_email='developers@neon.ai',
