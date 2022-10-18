@@ -1,0 +1,58 @@
+name: Run Build Tests
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Build Tools
+        run: |
+          python -m pip install build wheel
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install python3-dev swig libssl-dev libfann-dev portaudio19-dev libpulse-dev
+      - name: Build Distribution Packages
+        run: |
+          python setup.py bdist_wheel
+      - name: Install tflite_runtime workaround tflit bug
+        run: |
+          pip3 install numpy
+          pip3 install --extra-index-url https://google-coral.github.io/py-repo/ tflite_runtime
+      - name: Install core repo
+        run: |
+          pip install .[audio-backend,mark1,stt,tts,skills_minimal,skills,gui,bus,all]
+  unit_tests:
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9, '3.10']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install gcc libfann-dev
+          python -m pip install --upgrade pip
+          pip install . -r requirements/test_requirements.txt
+      - name: Test Utterance Plugin
+        run: |
+          pytest tests/test_utterance_plugin.py --doctest-modules --junitxml=tests/utterance-plugin-test-results.xml
+      - name: Upload Utterance Plugin test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: utterance-plugin-test-results
+          path: tests/utterance-plugin-test-results.xml

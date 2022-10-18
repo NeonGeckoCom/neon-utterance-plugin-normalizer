@@ -1,6 +1,9 @@
-# # NEON AI (TM) SOFTWARE, Software Development Kit & Application Development System
-# # All trademark and other rights reserved by their respective owners
-# # Copyright 2008-2021 Neongecko.com Inc.
+# NEON AI (TM) SOFTWARE, Software Development Kit & Application Framework
+# All trademark and other rights reserved by their respective owners
+# Copyright 2008-2022 Neongecko.com Inc.
+# Contributors: Daniel McKnight, Guy Daniels, Elon Gasper, Richard Leeds,
+# Regina Bloomstine, Casimiro Ferreira, Andrii Pernatii, Kirill Hrymailo
+# BSD-3 License
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 # 1. Redistributions of source code must retain the above copyright notice,
@@ -23,34 +26,5 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import re
-import lingua_franca.config
 
-from typing import List, Optional
-from lingua_franca.parse import normalize
-from neon_transformers import UtteranceTransformer
-from neon_transformers.tasks import UtteranceTask
-
-
-class UtteranceNormalizer(UtteranceTransformer):
-    task = UtteranceTask.TRANSFORM
-
-    def __init__(self, name="utterance_normalizer", priority=1):
-        super().__init__(name, priority)
-        lingua_franca.config.load_langs_on_demand = True
-
-    def transform(self, utterances: List[str],
-                  context: Optional[dict] = None) -> (list, dict):
-        context = context or {}
-        lang = context.get("lang") or self.config.get("lang", "en-us")
-        clean = [self._strip_punctuation(u) for u in utterances]
-        norm = [normalize(u, lang=lang, remove_articles=False) for u in clean]
-        norm2 = [normalize(u, lang=lang, remove_articles=True) for u in clean]
-        norm += [u for u in norm2 if u not in utterances and u not in norm]
-        norm += [u for u in clean if u not in utterances and u not in norm]
-        norm = [u for u in norm if u not in utterances]
-        return norm + utterances, {}
-
-    @staticmethod
-    def _strip_punctuation(utterance: str):
-        return utterance.rstrip('.').rstrip('?').rstrip('!')
+__version__ = "0.0.2"
