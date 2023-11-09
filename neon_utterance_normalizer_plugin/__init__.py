@@ -37,7 +37,8 @@ from neon_transformers.tasks import UtteranceTask
 class UtteranceNormalizer(UtteranceTransformer):
     task = UtteranceTask.TRANSFORM
 
-    def __init__(self, name: str = "utterance_normalizer", priority: int = 1,
+    def __init__(self, name: str = "neon_utterance_normalizer_plugin",
+                 priority: int = 1,
                  config: Optional[dict] = None):
         super().__init__(name, priority, config)
         self.config_core = Configuration()
