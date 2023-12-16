@@ -40,13 +40,15 @@ class TestUtterancePlugin(unittest.TestCase):
 
         # Contraction, article, and punctuation
         test_utterance = "what's a common name?"
-        utterances, _ = normalizer.transform([test_utterance])
+        utterances, meta = normalizer.transform([test_utterance])
         self.assertEqual(utterances, [
             "what is a common name",
             "what is common name",
             "what's a common name",
             "what's a common name?"
         ])
+        self.assertTrue(meta['normalization']['remove_punctuation'])
+        self.assertTrue(meta['normalization']['remove_articles'])
 
         # Multiple transcriptions
         test_utterances = ["what's your name", "what your name"]
@@ -56,6 +58,29 @@ class TestUtterancePlugin(unittest.TestCase):
             "what's your name",
             "what your name"
         ])
+
+        # Disable punctuation handling
+        normalizer.config['remove_punctuation'] = False
+        utterances, meta = normalizer.transform([test_utterance])
+        self.assertEqual(utterances, [
+            "what is a common name?",
+            "what is common name?",
+            "what's a common name?"
+        ])
+        self.assertFalse(meta['normalization']['remove_punctuation'])
+        self.assertTrue(meta['normalization']['remove_articles'])
+
+        # Disable article handling
+        normalizer.config['remove_punctuation'] = True
+        normalizer.config['remove_articles'] = False
+        utterances, meta = normalizer.transform([test_utterance])
+        self.assertEqual(utterances, [
+            "what is a common name",
+            "what's a common name",
+            "what's a common name?"
+        ])
+        self.assertTrue(meta['normalization']['remove_punctuation'])
+        self.assertFalse(meta['normalization']['remove_articles'])
 
     def test_strip_punctuation(self):
         self.assertEqual(UtteranceNormalizer._strip_punctuation('hello???'),

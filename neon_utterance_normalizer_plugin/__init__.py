@@ -28,6 +28,8 @@ import lingua_franca.config
 
 from typing import List, Optional
 from lingua_franca.parse import normalize
+from ovos_config import Configuration
+
 from neon_transformers import UtteranceTransformer
 from neon_transformers.tasks import UtteranceTask
 
@@ -35,21 +37,51 @@ from neon_transformers.tasks import UtteranceTask
 class UtteranceNormalizer(UtteranceTransformer):
     task = UtteranceTask.TRANSFORM
 
-    def __init__(self, name="utterance_normalizer", priority=1):
-        super().__init__(name, priority)
+    def __init__(self, name: str = "neon_utterance_normalizer_plugin",
+                 priority: int = 1,
+                 config: Optional[dict] = None):
+        super().__init__(name, priority, config)
+        self.config_core = Configuration()
         lingua_franca.config.load_langs_on_demand = True
 
     def transform(self, utterances: List[str],
                   context: Optional[dict] = None) -> (list, dict):
+        """
+        Normalize and return an ordered list of utterances
+        @param utterances: List of utterances to be normalized
+        @param context: Utterance context (unused)
+        @returns: Ordered list of normalized + raw utterances, dict context
+        """
         context = context or {}
-        lang = context.get("lang") or self.config.get("lang", "en-us")
-        clean = [self._strip_punctuation(u) for u in utterances]
-        norm = [normalize(u, lang=lang, remove_articles=False) for u in clean]
-        norm2 = [normalize(u, lang=lang, remove_articles=True) for u in clean]
-        norm += [u for u in norm2 if u not in utterances and u not in norm]
-        norm += [u for u in clean if u not in utterances and u not in norm]
-        norm = [u for u in norm if u not in utterances]
-        return norm + utterances, {}
+        lang = context.get("lang") or self.config_core.get("lang", "en-us")
+        remove_punctuation = self.config.get("remove_punctuation", True)
+        remove_articles = self.config.get("remove_articles", True)
+        clean = []
+        norm = []
+        norm2 = []
+        for utt in utterances:
+            # Strip punctuation first and add NEW strings to clean
+            if remove_punctuation:
+                utt = self._strip_punctuation(utt)
+                if not any((utt in utterances, utt in clean)):
+                    clean.append(utt)
+
+            # Do basic normalization next and add NEW strings to norm
+            normal = normalize(utt, lang=lang, remove_articles=False)
+            if not any((normal in utterances, normal in norm)):
+                norm.append(normal)
+
+            # Remove articles and add NEW strings to norm2
+            if remove_articles:
+                normal = normalize(utt, lang=lang, remove_articles=True)
+                if normal not in utterances:
+                    norm2.append(normal)
+
+        # Append no-article normalization and punctuation cleaned to end of list
+        norm += [u for u in norm2 + clean if u not in norm]
+        return (norm + utterances,
+                {"normalization": {"remove_punctuation": remove_punctuation,
+                                   "remove_articles": remove_articles}})
 
     @staticmethod
     def _strip_punctuation(utterance: str):
