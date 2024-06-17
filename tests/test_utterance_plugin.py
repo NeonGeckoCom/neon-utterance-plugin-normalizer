@@ -39,13 +39,13 @@ class TestUtterancePlugin(unittest.TestCase):
         normalizer = UtteranceNormalizer()
 
         # Contraction, article, and punctuation
-        test_utterance = "what's a common name?"
+        test_utterance = "\"what's a common name?\""
         utterances, meta = normalizer.transform([test_utterance])
         self.assertEqual(utterances, [
             "what is a common name",
             "what is common name",
             "what's a common name",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertTrue(meta['normalization']['remove_punctuation'])
         self.assertTrue(meta['normalization']['remove_articles'])
@@ -65,7 +65,7 @@ class TestUtterancePlugin(unittest.TestCase):
         self.assertEqual(utterances, [
             "what is a common name?",
             "what is common name?",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertFalse(meta['normalization']['remove_punctuation'])
         self.assertTrue(meta['normalization']['remove_articles'])
@@ -77,7 +77,7 @@ class TestUtterancePlugin(unittest.TestCase):
         self.assertEqual(utterances, [
             "what is a common name",
             "what's a common name",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertTrue(meta['normalization']['remove_punctuation'])
         self.assertFalse(meta['normalization']['remove_articles'])
