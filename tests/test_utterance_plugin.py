@@ -45,7 +45,7 @@ class TestUtterancePlugin(unittest.TestCase):
             "what is a common name",
             "what is common name",
             "what's a common name",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertTrue(meta['normalization']['remove_punctuation'])
         self.assertTrue(meta['normalization']['remove_articles'])
