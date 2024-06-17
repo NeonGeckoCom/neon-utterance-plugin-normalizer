@@ -23,7 +23,6 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import re
 import lingua_franca.config
 
 from typing import List, Optional
@@ -60,6 +59,8 @@ class UtteranceNormalizer(UtteranceTransformer):
         norm = []
         norm2 = []
         for utt in utterances:
+            # Strip any enclosing quotes
+            utt = utt.strip('"')
             # Strip punctuation first and add NEW strings to clean
             if remove_punctuation:
                 utt = self._strip_punctuation(utt)

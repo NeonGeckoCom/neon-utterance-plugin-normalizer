@@ -39,7 +39,7 @@ class TestUtterancePlugin(unittest.TestCase):
         normalizer = UtteranceNormalizer()
 
         # Contraction, article, and punctuation
-        test_utterance = "what's a common name?"
+        test_utterance = "\"what's a common name?\""
         utterances, meta = normalizer.transform([test_utterance])
         self.assertEqual(utterances, [
             "what is a common name",
