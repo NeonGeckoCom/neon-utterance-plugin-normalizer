@@ -1,2 +1,2 @@
-neon_transformers~=0.1
+neon-transformers~=1.0
 ovos-lingua-franca~=0.4

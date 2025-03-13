@@ -1,6 +1,6 @@
 # NEON AI (TM) SOFTWARE, Software Development Kit & Application Framework
 # All trademark and other rights reserved by their respective owners
-# Copyright 2008-2022 Neongecko.com Inc.
+# Copyright 2008-2025 Neongecko.com Inc.
 # Contributors: Daniel McKnight, Guy Daniels, Elon Gasper, Richard Leeds,
 # Regina Bloomstine, Casimiro Ferreira, Andrii Pernatii, Kirill Hrymailo
 # BSD-3 License
@@ -39,13 +39,13 @@ class TestUtterancePlugin(unittest.TestCase):
         normalizer = UtteranceNormalizer()
 
         # Contraction, article, and punctuation
-        test_utterance = "what's a common name?"
+        test_utterance = "\"what's a common name?\""
         utterances, meta = normalizer.transform([test_utterance])
         self.assertEqual(utterances, [
             "what is a common name",
             "what is common name",
             "what's a common name",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertTrue(meta['normalization']['remove_punctuation'])
         self.assertTrue(meta['normalization']['remove_articles'])
@@ -65,7 +65,7 @@ class TestUtterancePlugin(unittest.TestCase):
         self.assertEqual(utterances, [
             "what is a common name?",
             "what is common name?",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertFalse(meta['normalization']['remove_punctuation'])
         self.assertTrue(meta['normalization']['remove_articles'])
@@ -77,7 +77,7 @@ class TestUtterancePlugin(unittest.TestCase):
         self.assertEqual(utterances, [
             "what is a common name",
             "what's a common name",
-            "what's a common name?"
+            test_utterance
         ])
         self.assertTrue(meta['normalization']['remove_punctuation'])
         self.assertFalse(meta['normalization']['remove_articles'])
