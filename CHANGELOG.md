@@ -1,23 +1,28 @@
 # Changelog
 
-## [0.0.3a4](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/tree/0.0.3a4) (2023-11-14)
+## [0.1.1a3](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/tree/0.1.1a3) (2025-03-13)
 
-[Full Changelog](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/compare/0.0.3a3...0.0.3a4)
-
-**Merged pull requests:**
-
-- Refactor and make configurable [\#14](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/14) ([NeonDaniel](https://github.com/NeonDaniel))
-
-## [0.0.3a3](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/tree/0.0.3a3) (2023-11-09)
-
-[Full Changelog](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/compare/0.0.2...0.0.3a3)
+[Full Changelog](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/compare/0.1.1a2...0.1.1a3)
 
 **Merged pull requests:**
 
-- Update GH Actions to use shared workflows [\#15](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/15) ([NeonDaniel](https://github.com/NeonDaniel))
-- Use shared version\_bump automation script [\#13](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/13) ([NeonDaniel](https://github.com/NeonDaniel))
-- Remove invalid release Docker action [\#12](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/12) ([NeonDaniel](https://github.com/NeonDaniel))
-- Update GitHub Workflows [\#10](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/10) ([NeonDaniel](https://github.com/NeonDaniel))
+- Update to stable dependencies [\#19](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/19) ([NeonDaniel](https://github.com/NeonDaniel))
+
+## [0.1.1a2](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/tree/0.1.1a2) (2025-03-13)
+
+[Full Changelog](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/compare/0.1.1a1...0.1.1a2)
+
+**Merged pull requests:**
+
+- Add gitignore and update license notices [\#18](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/18) ([NeonDaniel](https://github.com/NeonDaniel))
+
+## [0.1.1a1](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/tree/0.1.1a1) (2024-06-17)
+
+[Full Changelog](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/compare/0.1.0...0.1.1a1)
+
+**Merged pull requests:**
+
+- Add parsing to handle wrapping `"` [\#17](https://github.com/NeonGeckoCom/neon-utterance-plugin-normalizer/pull/17) ([NeonDaniel](https://github.com/NeonDaniel))
 
 
 
