@@ -27,7 +27,7 @@ jobs:
         run: |
           pytest tests/test_utterance_plugin.py --doctest-modules --junitxml=tests/utterance-plugin-test-results.xml
       - name: Upload Utterance Plugin test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: utterance-plugin-test-results
+          name: utterance-plugin-test-results-${{ matrix.python-version }}
           path: tests/utterance-plugin-test-results.xml
